@@ -10,11 +10,18 @@ import matplotlib as mtb
 # print(df)
 
 
-df = pd.DataFrame(np.random.rand(100,5), columns=['a', 'b', 'c', 'd', 'e'])
-df.plot.hist()
+# df = pd.DataFrame(np.random.rand(100,5), columns=['a', 'b', 'c', 'd', 'e'])
+# df.plot.hist()
 
 
+import matplotlib.pyplot as plt
 
+# plt.rc("font", family="Malgun Gothic")
+plt.rc("font", family="AppleGothic")
+plt.rc("axes", unicode_minus=False)
+plt.style.use("fivethirtyeight")
+
+pd.Series([1, 3, 5, -7, 9]).plot.bar(title="한글 제목")
 
 
 
