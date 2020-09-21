@@ -24,6 +24,21 @@ df["월"] = df["확진일자"].dt.month
 df["주"] = df["확진일자"].dt.week
 print(df[["확진일", "확진일자", "월", "주"]].head(10))
 
-df["확진일자"].value_counts().sort_index().plot(figsize=(15, 4))
-chart = plt.axhline(30, color="red", linestyle=":")
+
+## 한글 폰트 설정
+import matplotlib.pyplot as plt
+plt.rc("font", family="Malgun Gothic")
+## 숫자 마이너스 값 깨짐 현장 해결
+plt.rc("axes", unicode_minus=False)
+
+## 시각화를 더 선명하게 설정
+from IPython.display import set_matplotlibe_formats
+set_matplotlibe_formats("retina")
+
+
+
+df["확진일자"].value_counts().sort_index().plot(title="한글 제목", figsize=(10, 5))
+plt.axhline(30, color="red", linestyle=":")
 plt.show()
+
+
