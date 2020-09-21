@@ -32,8 +32,8 @@ plt.rc("font", family="Malgun Gothic")
 plt.rc("axes", unicode_minus=False)
 
 ## 시각화를 더 선명하게 설정
-from IPython.display import set_matplotlibe_formats
-set_matplotlibe_formats("retina")
+from IPython.display import set_matplotlib_formats
+set_matplotlib_formats("retina")
 
 
 
