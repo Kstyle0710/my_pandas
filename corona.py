@@ -56,16 +56,18 @@ day_count = df['월일'].value_counts().sort_index()
 # print(day_count)
 # day_count.iloc[2]  # x 축의 두번째 값
 
-g= day_count.plot(title="Daily Seoul Covid19", figsize=(20, 5))
+g= day_count.plot(title="Daily Seoul Covid19", figsize=(16, 8))
 
 # g.text(x=2, y=3, s=3)   # 좌표 2, 3에 레이블 3을 표시 (for문으로 돌리면서 전부 표시 가능)
 for i in range(len(day_count)):
     case_count = day_count.iloc[i]
     if case_count > 100:
-        g.text(x=i-0.3, y=case_count, s=case_count)
+        g.text(x=i, y=case_count+1, s=case_count)
 
 
 plt.axhline(100, color="red", linestyle=":")
+plt.axhline(50, color="blue", linestyle=":")
+
 
 
 
