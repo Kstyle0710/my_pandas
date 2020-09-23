@@ -18,3 +18,17 @@ plt.style.use("fivethirtyeight")
 
 
 df = pd.read_csv('./data/world_covid19.csv', encoding="utf-8")
+# df1 = df['09.16'].str.strip("명")
+df = df.apply(lambda x: x.str.strip('명'), axis = 1)
+nation = df['국가/일']
+df = df[['09.16', '09.17', '09.18', '09.19', '09.20', '09.21', '09.22']]
+# df = df['09.16'].astype(str).astype(int)
+
+df = df.apply(pd.to_numeric, errors='ignore')   # convert all columns of DataFrame
+print(df)
+
+# df.plot()
+# plt.show()
+
+
+

@@ -16,8 +16,11 @@ import matplotlib.pyplot as plt
 # df.to_csv(file_name, index=False)
 # print("-------------------")
 
+
+
+
 ## 저장한 CSV로 분석 개시
-df = pd.read_csv('./data/seoul_covid19_9_20_.csv', encoding="utf-8")
+df = pd.read_csv('./data/seoul_covid19_9_21_.csv', encoding="utf-8")
 
 
 
