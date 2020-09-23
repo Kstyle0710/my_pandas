@@ -23,7 +23,6 @@ import matplotlib.pyplot as plt
 df = pd.read_csv('./data/seoul_covid19_9_21_.csv', encoding="utf-8")
 
 
-
 ## 한글 폰트 설정
 import matplotlib.pyplot as plt
 plt.rc("font", family="Malgun Gothic")
@@ -71,12 +70,7 @@ day_count = df['월일'].value_counts().sort_index()
 #
 # plt.axhline(100, color="red", linestyle=":")
 # plt.axhline(50, color="blue", linestyle=":")
-#
-#
-# plt.show()
-
-
-
+### plt.show()
 
 
 ## 특정 데이터 찾아가기.. 최대값
@@ -89,19 +83,34 @@ day_count = df['월일'].value_counts().sort_index()
 # print(filtered_df["접촉력"].describe())
 
 ## 슬라이싱 바 차트
-start_point = -50    # 최종에서 역으로 50일치...
-total_mean = day_count.mean()
-partial_mean = day_count[start_point:].mean()
-# print(mean_value)
+# start_point = -50    # 최종에서 역으로 50일치...
+# total_mean = day_count.mean()
+# partial_mean = day_count[start_point:].mean()
+# # print(mean_value)
+#
+# g = day_count[start_point :].plot.bar(title="Daily Seoul Covid19", figsize=(16, 8))
+#
+# for i in range(start_point*-1):
+#     case_count = day_count[start_point :].iloc[i]
+#     if case_count > 20:
+#         g.text(x=i-0.5, y=case_count+1, s=case_count)
+#
+# plt.axhline(total_mean, color="red", linestyle=":")
+# plt.axhline(partial_mean, color="blue", linestyle=":")
+#
+# plt.show()
 
-g = day_count[start_point :].plot.bar(title="Daily Seoul Covid19", figsize=(16, 8))
+## 월별 확진자수에 대한 빈도수 시각화
 
-for i in range(start_point*-1):
-    case_count = day_count[start_point :].iloc[i]
-    if case_count > 20:
-        g.text(x=i-0.5, y=case_count+1, s=case_count)
-
-plt.axhline(total_mean, color="red", linestyle=":")
-plt.axhline(partial_mean, color="blue", linestyle=":")
+month_case = df["월"].value_counts().sort_index() # sort_index가 없으면, 시간 순서가 아닌 확진자가 많은 순서대로 시각화를 하는 문제 발생
+# print(month_case)
+# print(month_case.iloc[0])    # 특정 인덱스 월별 확진자 인원수
+month_mean = month_case.mean()
+g = month_case.plot.bar(title = "Monthly Seoul Covid19", figsize=(16, 8), rot=0)
+for i in range(len(month_case)):
+     case_count = month_case.iloc[i]
+     if case_count > 20:
+         g.text(x=i-0.1, y=month_case.iloc[i]+50, s=month_case.iloc[i])
+plt.axhline(month_mean, color="red", linestyle=":")
 
 plt.show()
