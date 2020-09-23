@@ -59,25 +59,49 @@ day_count = df['월일'].value_counts().sort_index()
 # print(day_count)
 # day_count.iloc[2]  # x 축의 두번째 값
 
-g= day_count.plot(title="Daily Seoul Covid19", figsize=(16, 8))
 
-# g.text(x=2, y=3, s=3)   # 좌표 2, 3에 레이블 3을 표시 (for문으로 돌리면서 전부 표시 가능)
-for i in range(len(day_count)):
-    case_count = day_count.iloc[i]
-    if case_count > 100:
-        g.text(x=i, y=case_count+1, s=case_count)
+## 일반 플롯 차트
+# g= day_count.plot(title="Daily Seoul Covid19", figsize=(16, 8))
+#
+# # g.text(x=2, y=3, s=3)   # 좌표 2, 3에 레이블 3을 표시 (for문으로 돌리면서 전부 표시 가능)
+# for i in range(len(day_count)):
+#     case_count = day_count.iloc[i]
+#     if case_count > 100:
+#         g.text(x=i, y=case_count+1, s=case_count)
+#
+# plt.axhline(100, color="red", linestyle=":")
+# plt.axhline(50, color="blue", linestyle=":")
+#
+#
+# plt.show()
 
 
-plt.axhline(100, color="red", linestyle=":")
-plt.axhline(50, color="blue", linestyle=":")
 
 
 
+## 특정 데이터 찾아가기.. 최대값
+# print(day_count.describe())
+# print(day_count.max())   # 확진자 최대값
+# print(day_count[day_count == day_count.max()]) ## 확진지가 제일 많은 날
+# max_day = day_count[day_count == day_count.max()] ## 확진자가 제일 많았던 날의 발생이력 조회
+# print(df[df["월일"] == "08-29"])  ## 확진자가 제일 많은 날의 상세 데이터 df
+# filtered_df = df[df["월일"] == "08-29"]
+# print(filtered_df["접촉력"].describe())
 
+## 슬라이싱 바 차트
+start_point = -50    # 최종에서 역으로 50일치...
+total_mean = day_count.mean()
+partial_mean = day_count[start_point:].mean()
+# print(mean_value)
 
+g = day_count[start_point :].plot.bar(title="Daily Seoul Covid19", figsize=(16, 8))
 
+for i in range(start_point*-1):
+    case_count = day_count[start_point :].iloc[i]
+    if case_count > 20:
+        g.text(x=i-0.5, y=case_count+1, s=case_count)
 
+plt.axhline(total_mean, color="red", linestyle=":")
+plt.axhline(partial_mean, color="blue", linestyle=":")
 
 plt.show()
-
-
