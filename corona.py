@@ -101,16 +101,38 @@ day_count = df['월일'].value_counts().sort_index()
 # plt.show()
 
 ## 월별 확진자수에 대한 빈도수 시각화
+# month_case = df["월"].value_counts().sort_index() # sort_index가 없으면, 시간 순서가 아닌 확진자가 많은 순서대로 시각화를 하는 문제 발생
+# # print(month_case)
+# # print(month_case.iloc[0])    # 특정 인덱스 월별 확진자 인원수
+# month_mean = month_case.mean()
+# g = month_case.plot.bar(title = "Monthly Seoul Covid19", figsize=(16, 8), rot=0)
+# for i in range(len(month_case)):
+#      case_count = month_case.iloc[i]
+#      if case_count > 20:
+#          g.text(x=i-0.1, y=month_case.iloc[i]+50, s=month_case.iloc[i])
+# plt.axhline(month_mean, color="red", linestyle=":")
+#
+# plt.show()
 
-month_case = df["월"].value_counts().sort_index() # sort_index가 없으면, 시간 순서가 아닌 확진자가 많은 순서대로 시각화를 하는 문제 발생
-# print(month_case)
-# print(month_case.iloc[0])    # 특정 인덱스 월별 확진자 인원수
-month_mean = month_case.mean()
-g = month_case.plot.bar(title = "Monthly Seoul Covid19", figsize=(16, 8), rot=0)
-for i in range(len(month_case)):
-     case_count = month_case.iloc[i]
-     if case_count > 20:
-         g.text(x=i-0.1, y=month_case.iloc[i]+50, s=month_case.iloc[i])
-plt.axhline(month_mean, color="red", linestyle=":")
+## 주단위 확진자에 대한 빈도수 시각회
+# weekly_case = df["주"].value_counts().sort_index() # sort_index가 없으면, 시간 순서가 아닌 확진자가 많은 순서대로 시각화를 하는 문제 발생
+# print(weekly_case)
+# # # print(weekly_case.iloc[0])    # 특정 인덱스 월별 확진자 인원수
+# weekly_mean = weekly_case.mean()
+# g = weekly_case.plot.bar(title = "Weekly Seoul Covid19", figsize=(12, 5), rot=0)
+# for i in range(len(weekly_case)):
+#      case_count = weekly_case.iloc[i]
+#      if case_count > 20:
+#          g.text(x=i-0.1, y=weekly_case.iloc[i]+50, s=weekly_case.iloc[i])
+# plt.axhline(weekly_mean, color="red", linestyle=":")
+#
+# plt.show()
 
-plt.show()
+## 월가 주를 함께 그룹화하여 빈도수 구하고 시각화 하기
+## value_counts는 시리즈에서만 사용 가능, 데이터프레임에서는 불가능 그래서 그룹바이 사용
+
+# month_week_case = df.groupby(["월", "주"])["연번"].count()
+# # print(month_week_case)
+#
+# month_week_case.plot.bar(title = "Monthly + Weekly Seoul Covid19", figsize=(16, 7), rot=30)
+# plt.show()
