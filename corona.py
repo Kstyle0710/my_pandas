@@ -136,3 +136,37 @@ day_count = df['월일'].value_counts().sort_index()
 #
 # month_week_case.plot.bar(title = "Monthly + Weekly Seoul Covid19", figsize=(16, 7), rot=30)
 # plt.show()
+
+## 확진자가 발생하지 않은 날도 포함하여 시각화
+# print(day_count)
+# print(df.iloc[-1])  # 리스트의 맨 첫번째 날짜 전체 정보
+# print(df.iloc[-1, 7])   # 리스트의 맨 마지막 날짜의 날짜 정보(7행)
+first_day = df.iloc[-1, 7]
+
+# print(df.iloc[0])  # 리스트의 맨 마지막 날짜 전체 정보
+last_day = df.iloc[0, 7]
+
+days = pd.date_range(first_day, last_day)
+# print(days)   # 시리즈 형태
+# print(pd.DataFrame({"확진일자" : days}))    # 데이터프레임 형태
+df_days = pd.DataFrame({"확진일자" : days})
+
+daily_case = df["확진일자"].value_counts()   # 확진일자별 빈도수
+df_daily_case = pd.DataFrame(daily_case)
+df_daily_case.columns = ["확진수"]   # 컬럼명 바꾸기
+
+merge_result = df_days.merge(df_daily_case, left_on="확진일자", right_on=df_daily_case.index, how="left")
+# print(merge_result)
+
+## 누적 확진자수 구하기
+
+
+
+merge_result.plot()
+plt.show()
+
+
+
+
+
+
