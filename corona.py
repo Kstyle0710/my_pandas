@@ -155,15 +155,52 @@ daily_case = df["확진일자"].value_counts()   # 확진일자별 빈도수
 df_daily_case = pd.DataFrame(daily_case)
 df_daily_case.columns = ["확진수"]   # 컬럼명 바꾸기
 
-merge_result = df_days.merge(df_daily_case, left_on="확진일자", right_on=df_daily_case.index, how="left")
-# print(merge_result)
+all_day = df_days.merge(df_daily_case, left_on="확진일자", right_on=df_daily_case.index, how="left")
+# print(all_day)
 
 ## 누적 확진자수 구하기
+# accum_sum = all_day["확진수"].sum()   # 총 누적 확진수
+# print(accum_sum)
+# accum_sum = all_day["확진수"].fillna(0)  # NaN을 0으로 변경
+# print(accum_sum)
+# accum_sum = all_day["확진수"].fillna(0).cumsum()  # 누적해서 더해주기
+# print(accum_sum)
 
+all_day["누적확진"] = all_day["확진수"].fillna(0).cumsum()  # all_day 에 칼럼으로 추가하기
+# print(all_day)
 
+## 연도 제외하기
+all_day["일자"] = all_day["확진일자"].astype(str).map(lambda x : x[-5:])
+# print(all_day)
 
-merge_result.plot()
+## 확진수, 누적확진 칼럼을 갖는 데이터프레임 만들기
+cum_day = all_day[["일자", "확진수", "누적확진"]]
+cum_day = cum_day.set_index("일자")
+# print(cum_day)
+
+# cum_day.plot(title = "Accumulated Seoul Covid19", figsize=(16, 7))
+# plt.show()
+
+## 시리즈로 2개 그래프 그리기
+
+# cum_day["확진수"].plot.bar(figsize=(16, 7))
+# cum_day["누적확진"].plot(figsize=(16, 7), rot=30)
+# plt.show()
+
+## 로그 스케일 적용하기
+
+np.log(cum_day["누적확진"]).plot(figsize=(16, 7))
+np.log(cum_day["확진수"]).plot.bar()
+
 plt.show()
+
+
+
+
+
+
+
+
 
 
 
