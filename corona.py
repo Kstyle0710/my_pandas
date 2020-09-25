@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 
 
 ## 저장한 CSV로 분석 개시
-df = pd.read_csv('./data/seoul_covid19_9_21_.csv', encoding="utf-8")
+df = pd.read_csv('./data/seoul_covid19_9_24_.csv', encoding="utf-8")
 
 
 ## 한글 폰트 설정
@@ -188,13 +188,38 @@ cum_day = cum_day.set_index("일자")
 # plt.show()
 
 ## 로그 스케일 적용하기
+# np.log(cum_day["누적확진"]).plot(figsize=(16, 7))
+# np.log(cum_day["확진수"]).plot.bar()
+#
+# plt.show()
 
-np.log(cum_day["누적확진"]).plot(figsize=(16, 7))
-np.log(cum_day["확진수"]).plot.bar()
+## 확진월과 요일 구하기
 
+# print(all_day["확진일자"].dt.month)
+all_day["확진월"] = all_day["확진일자"].dt.month
+all_day["확진요일"] =  all_day["확진일자"].dt.dayofweek    ## 0은 월요일
+# print(all_day)
+
+## 요일별 확진수 groupby로 구하기
+
+# print(all_day.groupby(["확진월", "확진요일"])["확진수"].sum())  ## 월별 요일별 확진수에 대한 확진자 수
+
+all_day_week = all_day.groupby(["확진월", "확진요일"])["확진수"].sum()
+# print(all_day_week)
+# print(all_day_week.index)
+# print(all_day_week.unstack().astype(int))   ## 멀티인덱스의 마지막 값을 칼럼명으로 바꿔준다.
+all_day_week = all_day_week.unstack().astype(int)
+## split으로 요일을 문자로 바꿔주기
+dayofweek = "월 화 수 목 금 토 일"
+dayofweek = dayofweek.split()
+all_day_week.columns = dayofweek
+# print(all_day_week)
+## style.background_gradient로 색상을 표현
+new = all_day_week.style.background_gradient(cmap="Blues")
+print(new)
+
+all_day_week.plot.bar(title = "월별 요일별 Seoul Covid19", figsize=(16, 7), rot=0)
 plt.show()
-
-
 
 
 
