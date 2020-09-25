@@ -216,10 +216,49 @@ all_day_week.columns = dayofweek
 # print(all_day_week)
 ## style.background_gradient로 색상을 표현
 new = all_day_week.style.background_gradient(cmap="Blues")
-print(new)
+# print(new)
 
-all_day_week.plot.bar(title = "월별 요일별 Seoul Covid19", figsize=(16, 7), rot=0)
-plt.show()
+# all_day_week.plot.bar(title = "월별 요일별 Seoul Covid19", figsize=(16, 7), rot=0)
+# plt.show()
+
+## 거주지별 확진자
+# print(df["거주지"].value_counts())
+gu_count = df["거주지"].value_counts()
+# gu_count.plot.barh(figsize=(10, 15))   ## 위에가 적은 순
+# gu_count.sort_values().plot.barh(figsize=(10, 15))   ## 위에가 많은 순
+# plt.show()
+
+## 서울 구만 추출
+# print(gu_count[0:27])   ## 상위권 지역 조회 (기타가 포함되어 있음)
+gu_index = gu_count[0:27]
+gu_index = gu_index.index.tolist()
+gu_index.remove("기타")
+gu_index.remove("타시도")
+# print(gu_index)
+
+## 거주지가 서울이 아닌 지역을 따로 추출
+not_seoul = set(gu_count.index) - set(gu_index)
+# print(not_seoul)
+
+## reset_index로 데이터 프레임으로 변환
+df_gu = gu_count.reset_index()
+df_gu.columns = ["구", "확진수"]
+# print(df_gu)
+
+## 지역이라는 새로운 칼럼을 만들어 서울이 아닌 타지역 값을 넣어주기
+# print(df_gu[df_gu["구"].isin(gu_index)])  ## 서울 지역만 보기
+# print(df_gu[~df_gu["구"].isin(gu_index)])  ## 서울 외 지역만 보기(물결 표시)
+
+# print(df[df["거주지"].isin(gu_index)])
+# print(df.loc[df["거주지"].isin(gu_index)])
+df.loc[df["거주지"].isin(gu_index), "지역"] = df["거주지"]
+# print(df)
+df["지역"] = df["지역"].fillna("타지역")
+# print(df)
+# print(df["지역"].unique())
+# df["지역"].value_counts().plot.barh()
+# plt.show()
+
 
 
 
