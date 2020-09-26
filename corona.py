@@ -260,7 +260,44 @@ df["지역"] = df["지역"].fillna("타지역")
 # plt.show()
 
 
+## 접촉력 분석
+## 접촉력 빈도수
+# print(df["접촉력"].value_counts().head(20))
 
+## 접촉력 유니크
+# print(df["접촉력"].unique())
+
+##확인이 들어가 있는 접촉력만 찾기
+# print(df[df["접촉력"].str.contains("확인")])
+# print(df.loc[df["접촉력"].str.contains("확인"), "접촉력"].unique())
+
+##확인중을 확인 중으로 변경
+df.loc[df["접촉력"].str.contains("확인"), "접촉력"] = "확인 중"
+# print(df.loc[df["접촉력"].str.contains("확인"), "접촉력"].unique())
+# print(df["접촉력"].value_counts())
+
+## 접촉력 빈도수 시각화
+contact_count = df["접촉력"].value_counts()
+contact_count_top = contact_count.sort_values().tail(30)
+# contact_count_top.plot.barh(figsize=(15, 7))
+# plt.show()
+
+## 상위 15개만 구하기
+top_contact = contact_count_top.tail(15)
+## 접촉력 빈도수가 높은 목록에 대한 index 값 구하기
+top_contact.index
+##위에서 구한 top_contact에 해당하는 데이터만 isin으로 가져오기
+# print(df[df["접촉력"].isin(top_contact.index)])
+top_group = df[df["접촉력"].isin(top_contact.index)]
+## 접촉력, 월별 빈도수를 groupby로 구하기
+# top_group.groupby(["접촉력", "월"])["연번"].count()
+result = top_group.groupby(["접촉력", "월"])["연번"].count().unstack().fillna(0).astype(int)
+# print(result)
+
+## 이태원이 들어간 접촉력 보기
+# print(df[df["접촉력"].str.contains("이태원")])
+## 이태원 + 6월 접촉력 보기
+print(df[df["접촉력"].str.contains("이태원") & (df["월"]==6)])   ## 두번째 조건은 괄호로 묶어준다.
 
 
 
