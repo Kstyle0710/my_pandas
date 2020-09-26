@@ -297,8 +297,41 @@ result = top_group.groupby(["접촉력", "월"])["연번"].count().unstack().fil
 ## 이태원이 들어간 접촉력 보기
 # print(df[df["접촉력"].str.contains("이태원")])
 ## 이태원 + 6월 접촉력 보기
-print(df[df["접촉력"].str.contains("이태원") & (df["월"]==6)])   ## 두번째 조건은 괄호로 묶어준다.
+# print(df[df["접촉력"].str.contains("이태원") & (df["월"]==6)])   ## 두번째 조건은 괄호로 묶어준다.
 
+## 감염경로 불명.. 접촉력이 확인중인 데이터만 구하기
+# print(df[df["접촉력"].str.contains("확인")])
+# print(df[df["접촉력"] == "확인 중"])
+df_unknown = df[df["접촉력"] == "확인 중"]
+unknown_weekly_case = df_unknown.groupby(["월", "주"])["연번"].count()
+# print(unknown_weekly_case)
+# unknown_weekly_case.plot.bar(figsize=(15,7))
+# plt.show()
+
+## 다시 주별 전체 확진수 데이터 프레임으로 구하기
+# all_weekly_case = df["주"].value_counts()
+all_weekly_case = df["주"].value_counts().to_frame()
+all_weekly_case.columns = ["전체확진수"]
+# print(all_weekly_case)
+
+## 주별 확인중 데이터 구하기
+# print(df_unknown["주"])
+unknown_weekly_case2 = df_unknown["주"].value_counts().to_frame()
+unknown_weekly_case2.columns = ["불명확진수"]
+
+## 전체와 확인중 데이터 비교
+unknown_case = all_weekly_case.merge(unknown_weekly_case2, left_index=True, right_index=True)
+# print(unknown_case)
+unknown_case = unknown_case.sort_index()
+# print(unknown_case)
+# unknown_case.plot(figsize=(15, 4))
+# plt.show()
+
+## 감염경로 확인중의 주별 비율 구하기
+unknown_case["불명비율"] = unknown_case["불명확진수"]/unknown_case["전체확진수"]*100
+# print(unknown_case)
+unknown_case["불명비율"].plot.bar(figsize=(15, 4))
+plt.show()
 
 
 
