@@ -420,6 +420,42 @@ df_oversea.loc[df_oversea["해외"].str.contains("마닐라"), "해외"] = "필�
 df_oversea.loc[df_oversea["해외"].str.contains("미국"), "해외"] = "미국"
 # print(df_oversea["해외"].value_counts())
 
+## 해외유입 사례들에 대한 상세 분석
+# print(df_oversea.groupby(["확진일자", "해외"])["연번"].count())
+day_oversea = df_oversea.groupby(["확진일자", "해외"])["연번"].count()
+# print(day_oversea)
+## 이어서 누적 확진수 구하기
+day_oversea = day_oversea.groupby(level=[1]).cumsum()
+# print(day_oversea)
+## 데이터 프레임 형태로 변경
+# print(day_oversea.reset_index())
+df_day_oversea = day_oversea.reset_index()
+# print(df_day_oversea)
+df_day_oversea = df_day_oversea.rename(columns={"연번":"누적확진수"})
+# print(df_day_oversea)
+
+##시각화1
+oversea_count = df_oversea["해외"].value_counts()
+# oversea_count.sort_values().plot.barh(figsize=(15, 10))
+# plt.show()
+
+##시각화2
+# print(df_day_oversea)
+df_day_oversea = df_day_oversea.set_index("확진일자")
+# print(df_day_oversea)
+
+# df_day_oversea.pivot(columns="해외").plot(figsize=(20, 6), legend=False)
+# plt.show()
+
+# print(df_day_oversea["해외"])
+print(df_day_oversea[df_day_oversea["해외"] == "중국"])
+df_day_oversea.loc[df_day_oversea["해외"] == "중국", "누적확진수"].plot()
+plt.show()
+
+
+
+
+
 
 
 
