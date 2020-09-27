@@ -363,6 +363,26 @@ top_contact_no = df_contact["index"]
 # print(df.head())
 # print(df[df["접촉번호"].isin(top_contact_no)])
 
+## 조치사항에 대한 빈도수를 구하기 (value_count()는 시리즈에서만 사용할 수 있음, 단일변수의 빈도수를 구할 때 사용)
+
+# print(df["퇴원현황"])
+# print(df["퇴원현황"].unique())
+
+df["퇴원"] = df["퇴원현황"].str.contains("퇴원")
+df["사망"] = df["퇴원현황"].str.contains("사망")
+# print(df["퇴원"].value_counts())  ## 데이터 수집 시점에 퇴원하지 못한 환자수
+# print(df["퇴원"].value_counts(normalize=True)) ## 퇴원여부 빈도수에 대한 비율 구하기
+# print(df["사망"].value_counts())  ## 데이터 수집 시점에 사망 환자수
+# print(df["사망"].value_counts(normalize=True)) ## 사망여부 빈도수에 대한 비율 구하기
+
+## 데이터 수집일 기준 가장 오래 입원한 환자 (현재 기준 퇴원도 아니고, 사망도 아닌 사람)
+# print(df[(df["퇴원"] != True) & (df["사망"] != True)])
+result = df[(df["퇴원"] != True) & (df["사망"] != True)]
+# print(result.tail(1))
+longest = result.tail(1)
+# print(longest["확진일자"])
+
+
 
 
 
