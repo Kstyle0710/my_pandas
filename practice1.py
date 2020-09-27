@@ -17,14 +17,15 @@ import matplotlib as mtb
 import matplotlib.pyplot as plt
 
 # plt.rc("font", family="Malgun Gothic")
-plt.rc("font", family="AppleGothic")
-plt.rc("axes", unicode_minus=False)
-plt.style.use("fivethirtyeight")
+# plt.rc("font", family="AppleGothic")
+# plt.rc("axes", unicode_minus=False)
+# plt.style.use("fivethirtyeight")
 
-pd.Series([1, 3, 5, -7, 9]).plot.bar(title="한글 제목")
+# pd.Series([1, 3, 5, -7, 9]).plot.bar(title="한글 제목")
 
 
 
 # url = "https://www.seoul.go.kr/coronaV/coronaStatus.do"
 # df = pd.read_html(url)
 # print(df[0])
+

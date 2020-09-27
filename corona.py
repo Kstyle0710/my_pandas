@@ -17,10 +17,8 @@ import matplotlib.pyplot as plt
 # print("-------------------")
 
 
-
-
 ## 저장한 CSV로 분석 개시
-df = pd.read_csv('./data/seoul_covid19_9_24_.csv', encoding="utf-8")
+df = pd.read_csv('./data/seoul_covid19_9_25_.csv', encoding="utf-8")
 
 
 ## 한글 폰트 설정
@@ -62,11 +60,11 @@ day_count = df['월일'].value_counts().sort_index()
 ## 일반 플롯 차트
 # g= day_count.plot(title="Daily Seoul Covid19", figsize=(16, 8))
 #
-# # g.text(x=2, y=3, s=3)   # 좌표 2, 3에 레이블 3을 표시 (for문으로 돌리면서 전부 표시 가능)
+## g.text(x=2, y=3, s=3)   # 좌표 2, 3에 레이블 3을 표시 (for문으로 돌리면서 전부 표시 가능)
 # for i in range(len(day_count)):
 #     case_count = day_count.iloc[i]
 #     if case_count > 100:
-#         g.text(x=i, y=case_count+1, s=case_count)
+#         g.text(x=i, y=case_count, s=case_count)
 #
 # plt.axhline(100, color="red", linestyle=":")
 # plt.axhline(50, color="blue", linestyle=":")
@@ -93,7 +91,7 @@ day_count = df['월일'].value_counts().sort_index()
 # for i in range(start_point*-1):
 #     case_count = day_count[start_point :].iloc[i]
 #     if case_count > 20:
-#         g.text(x=i-0.5, y=case_count+1, s=case_count)
+#         g.text(x=i-0.5, y=case_count, s=case_count)
 #
 # plt.axhline(total_mean, color="red", linestyle=":")
 # plt.axhline(partial_mean, color="blue", linestyle=":")
@@ -330,8 +328,41 @@ unknown_case = unknown_case.sort_index()
 ## 감염경로 확인중의 주별 비율 구하기
 unknown_case["불명비율"] = unknown_case["불명확진수"]/unknown_case["전체확진수"]*100
 # print(unknown_case)
-unknown_case["불명비율"].plot.bar(figsize=(15, 4))
-plt.show()
+# unknown_case["불명비율"].plot.bar(figsize=(15, 4))
+# plt.show()
+
+## 가장 많이 전파가 일어난 번호 (정규 표현식 사용)
+## re.sub("규칙","패턴",'데이터")
+
+import re
+
+# result = re.sub("[0-9]", "", "7265 접촉(추정)")   # 숫자는 공백으로 바꿔라
+# print(result)
+
+# result = re.sub("[^0-9]", "", "7265 접촉(추정)")   # 숫자가 아닌 것은 공백으로 바꿔라
+# print(result)
+
+def get_number(text):
+    return re.sub("[^0-9]", "", text)
+# print(get_number("123가나다456"))
+
+df["접촉번호"] = df["접촉력"].map(get_number)   #map 함수를 통해 숫자 외의 문자를 제거하는 방법
+# print(df["접촉번호"].value_counts().to_frame())
+# print(df["접촉번호"].value_counts().reset_index())
+contact = df["접촉번호"].value_counts().reset_index()
+
+## 접촉번호가 없는 0행은 drop으로 삭제
+# print(contact.drop(0))
+df_contact = contact.drop(0)
+# print(df_contact)
+
+## 상위 10개의 접촉번호를 구해서 top_contact_no 변수에 할당하고 재사용
+top_contact_no = df_contact["index"]
+
+## contact의 환자번호와 df의 접속번호를 merge
+# print(df.head())
+# print(df[df["접촉번호"].isin(top_contact_no)])
+
 
 
 
