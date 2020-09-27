@@ -382,9 +382,43 @@ result = df[(df["퇴원"] != True) & (df["사망"] != True)]
 longest = result.tail(1)
 # print(longest["확진일자"])
 
+## 여행력 분석
+# print(df["여행력"].value_counts())
+df["해외"] = df["여행력"]
+df["해외"] = df["해외"].str.strip()   # 공백 제거
+df["해외"] = df["해외"].replace("-", np.nan)  # - 제거
+# print(df["해외"].value_counts())
+df["해외"].unique()
 
+## 여행력이 있는 데이터만 가져와서 서브셋 만들기
+# print(df[df["해외"].notnull()])
+df_oversea = df[df["해외"].notnull()].copy()
+# print(df_oversea.shape)
 
+## 중복 지역명 확인
+# print(df_oversea["해외"].unique())
 
+## 유럽지역을 방문했다면 유럽이라고 바꿔지기 위해 국가명을 str.contains로 검색하기 위한 형태로 변경
+europe = "체코, 헝가리, 오스트리아, 이탈리아, 프랑스, 모로코, 독일, 스페인, 영국, 폴란드, 터기, 아일랜드"
+europe = europe.replace(", ", "|")
+# print(df_oversea[df_oversea["해외"].str.contains(europe)])
+
+## 남미지역에 해당하는 국가명을 str.contains로 검색하기 위한 형태로 변경
+south_america = "브라질, 아르헨티나, 칠레, 볼리비아, 페루, 멕시코"
+south_america = south_america.replace(", ", "|")
+# print(df_oversea[df_oversea["해외"].str.contains(south_america)])
+
+## 중복되는 국가나 지역을 특정 텍스트로 변경후 그룹화해서 빈도수 구하기 (.str.contains와 .loc 사용)
+# print(df_oversea["해외"].str.contains(europe))
+# print(df_oversea[df_oversea["해외"].str.contains(europe)])     # 해외 칼럼에 europe가 포함된 전체 데이터
+# print(df_oversea.loc[df_oversea["해외"].str.contains(europe), "해외"])  # 해외 칼럼에 europe가 포함된 해외 칼럼
+df_oversea.loc[df_oversea["해외"].str.contains(europe), "해외"] = "유럽"  # 그 값을 유럽으로 변경
+df_oversea.loc[df_oversea["해외"].str.contains(south_america), "해외"] = "남미"
+df_oversea.loc[df_oversea["해외"].str.contains("중국|우한"), "해외"] = "중국"
+df_oversea.loc[df_oversea["해외"].str.contains("아랍에미리트"), "해외"] = "UAE"
+df_oversea.loc[df_oversea["해외"].str.contains("마닐라"), "해외"] = "필리핀"
+df_oversea.loc[df_oversea["해외"].str.contains("미국"), "해외"] = "미국"
+# print(df_oversea["해외"].value_counts())
 
 
 
