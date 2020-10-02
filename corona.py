@@ -2,24 +2,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-## 별도의 로그인이 필요없는 사이트에서 table tag를 크롤링하기
-## 서울 코로나 발생자 현황 크롤링 with pandas
-
-# url = 'https://www.seoul.go.kr/coronaV/coronaStatus.do'
-# table = pd.read_html(url)
-# print(table[3])
-# print("--------------------")
-# df = table[3]
-# last_day = df.loc[0, "확진일"]
-# last_day = last_day.replace(".", "_")
-# file_name = f"./data/seoul_covid19_{last_day}.csv"
-# df.to_csv(file_name, index=False)
-# print("-------------------")
-
-
 ## 저장한 CSV로 분석 개시
-df = pd.read_csv('./data/seoul_covid19_9_25_.csv', encoding="utf-8")
-
+df = pd.read_csv('./data/seoul_covid19_10_01_.csv', encoding="utf-8")
 
 ## 한글 폰트 설정
 import matplotlib.pyplot as plt
@@ -57,10 +41,9 @@ day_count = df['월일'].value_counts().sort_index()
 # day_count.iloc[2]  # x 축의 두번째 값
 
 
-## 일반 플롯 차트
+## 일일 발생자 일반 플롯 차트
 # g= day_count.plot(title="Daily Seoul Covid19", figsize=(16, 8))
-#
-## g.text(x=2, y=3, s=3)   # 좌표 2, 3에 레이블 3을 표시 (for문으로 돌리면서 전부 표시 가능)
+# g.text(x=2, y=3, s=3)   # 좌표 2, 3에 레이블 3을 표시 (for문으로 돌리면서 전부 표시 가능)
 # for i in range(len(day_count)):
 #     case_count = day_count.iloc[i]
 #     if case_count > 100:
@@ -68,7 +51,7 @@ day_count = df['월일'].value_counts().sort_index()
 #
 # plt.axhline(100, color="red", linestyle=":")
 # plt.axhline(50, color="blue", linestyle=":")
-### plt.show()
+# plt.show()
 
 
 ## 특정 데이터 찾아가기.. 최대값
@@ -129,11 +112,11 @@ day_count = df['월일'].value_counts().sort_index()
 ## 월가 주를 함께 그룹화하여 빈도수 구하고 시각화 하기
 ## value_counts는 시리즈에서만 사용 가능, 데이터프레임에서는 불가능 그래서 그룹바이 사용
 
-# month_week_case = df.groupby(["월", "주"])["연번"].count()
-# # print(month_week_case)
-#
-# month_week_case.plot.bar(title = "Monthly + Weekly Seoul Covid19", figsize=(16, 7), rot=30)
-# plt.show()
+month_week_case = df.groupby(["월", "주"])["연번"].count()
+# print(month_week_case)
+
+month_week_case.plot.bar(title = "Monthly + Weekly Seoul Covid19", figsize=(16, 7), rot=30)
+plt.show()
 
 ## 확진자가 발생하지 않은 날도 포함하여 시각화
 # print(day_count)
@@ -448,9 +431,9 @@ df_day_oversea = df_day_oversea.set_index("확진일자")
 # plt.show()
 
 # print(df_day_oversea["해외"])
-print(df_day_oversea[df_day_oversea["해외"] == "중국"])
-df_day_oversea.loc[df_day_oversea["해외"] == "중국", "누적확진수"].plot()
-plt.show()
+# print(df_day_oversea[df_day_oversea["해외"] == "중국"])
+# df_day_oversea.loc[df_day_oversea["해외"] == "중국", "누적확진수"].plot()
+# plt.show()
 
 
 
