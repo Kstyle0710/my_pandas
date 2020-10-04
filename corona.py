@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 ## 저장한 CSV로 분석 개시
-df = pd.read_csv('./data/seoul_covid19_10_01_.csv', encoding="utf-8")
+df = pd.read_csv('./data/seoul_covid19_10_03_.csv', encoding="utf-8")
 
 ## 한글 폰트 설정
 import matplotlib.pyplot as plt

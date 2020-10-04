@@ -15,13 +15,24 @@ import matplotlib as mtb
 
 
 
-df2 = pd.DataFrame([[np.nan, 2, np.nan, 0], [3, 4, np.nan, 1], [np.nan, np.nan, np.nan, 5]],
-                   columns=list('ABCD'))
-print(df2)
-
+# df2 = pd.DataFrame([[np.nan, 2, np.nan, 0], [3, 4, np.nan, 1], [np.nan, np.nan, np.nan, 5]],
+#                    columns=list('ABCD'))
+# print(df2)
 # df2 = df2.dropna(axis=1, how="any")   ## 열기준으로 하나라도 널값이 있으면 열을 삭제
-df2 = df2.fillna("K")
-print(df2)
+# df2 = df2.fillna("K")
+# print(df2)
+
+
+# df = pd.DataFrame({'A':range(1, 11), 'B':np.random.randn(10)})
+# print(df)
+# df["category"] = pd.qcut(df.A, 3, labels = ["high", "medium", "low"])
+# print(df)
+
+
+
+
+
+
 
 
 
