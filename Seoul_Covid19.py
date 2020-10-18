@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-df = pd.read_csv('./data/seoul_covid19_10_11_.csv', encoding = 'utf-8')
+df = pd.read_csv('./data/seoul_covid19_10_16_.csv', encoding = 'utf-8')
 
 ## 한글 폰트 설정
 import matplotlib.pyplot as plt
@@ -24,7 +24,7 @@ df['월일'] = df["확진일자"].astype(str).map(lambda x : x[-5:])
 
 day_count = df['월일'].value_counts().sort_index()
 
-# # 일일 발생자 일반 플롯 차트
+# 일일 발생자 일반 플롯 차트
 # g= day_count.plot(title="Daily Seoul Covid19", figsize=(16, 8))
 # g.text(x=2, y=3, s=3)   # 좌표 2, 3에 레이블 3을 표시 (for문으로 돌리면서 전부 표시 가능)
 # for i in range(len(day_count)):
@@ -65,15 +65,15 @@ day_count = df['월일'].value_counts().sort_index()
 # plt.axhline(month_mean, color="red", linestyle=":")
 # plt.show()
 
-# # 주단위 확진자에 대한 빈도수 시각회
-# weekly_case = df["주"].value_counts().sort_index() # sort_index가 없으면, 시간 순서가 아닌 확진자가 많은 순서대로 시각화를 하는 문제 발생
-# print(weekly_case)
-# # # print(weekly_case.iloc[0])    # 특정 인덱스 월별 확진자 인원수
-# weekly_mean = weekly_case.mean()
-# g = weekly_case.plot.bar(title = "Weekly Seoul Covid19", figsize=(12, 5), rot=0)
-# for i in range(len(weekly_case)):
-#      case_count = weekly_case.iloc[i]
-#      if case_count > 20:
-#          g.text(x=i-0.1, y=weekly_case.iloc[i]+50, s=weekly_case.iloc[i])
-# plt.axhline(weekly_mean, color="red", linestyle=":")
-# plt.show()
+# 주단위 확진자에 대한 빈도수 시각회
+weekly_case = df["주"].value_counts().sort_index() # sort_index가 없으면, 시간 순서가 아닌 확진자가 많은 순서대로 시각화를 하는 문제 발생
+print(weekly_case)
+# # print(weekly_case.iloc[0])    # 특정 인덱스 월별 확진자 인원수
+weekly_mean = weekly_case.mean()
+g = weekly_case.plot.bar(title = "Weekly Seoul Covid19", figsize=(12, 5), rot=0)
+for i in range(len(weekly_case)):
+     case_count = weekly_case.iloc[i]
+     if case_count > 20:
+         g.text(x=i-0.1, y=weekly_case.iloc[i]+50, s=weekly_case.iloc[i])
+plt.axhline(weekly_mean, color="red", linestyle=":")
+plt.show()
