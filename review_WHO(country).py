@@ -2,18 +2,17 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+plt.rc("font", family="Malgun Gothic")
+## 숫자 마이너스 값 깨짐 현장 해결
+plt.rc("axes", unicode_minus=False)
+plt.style.use("fivethirtyeight")
+
 
 ## 파일 읽어오기
 df = pd.read_csv('./data/WHO-COVID-19-global-data.csv')
 # print(df.shape)
 # print(df.info())
 # print(df.head())
-
-plt.rc("font", family="Malgun Gothic")
-## 숫자 마이너스 값 깨짐 현장 해결
-plt.rc("axes", unicode_minus=False)
-plt.style.use("fivethirtyeight")
-
 
 ## 칼럼명의 공란 지우기
 df.columns = df.columns.str.replace(' ', '')
@@ -74,55 +73,52 @@ country = df["Country"].unique()
 
 '''
 
-## 타겟 국가 정보만 가져오기
-target = 'Sweden'         ## 'Republic of Korea
-columns = ['Date_reported', 'Country', 'New_cases', 'Cumulative_cases', 'New_deaths', 'Cumulative_deaths']
+################### 국가별 분석
+target = 'France'         ## 'Republic of Korea'
+columns = ['Date_reported', 'Country', 'New_cases', 'Cumulative_cases', 'New_deaths', 'Cumulative_deaths']   ## 출력 대상 칼럼
 target_df = df.loc[df["Country"] == target, columns]
+# date_list = df.values.tolist()
+# print(date_list)
 # print(target_df)
 target_df = target_df.set_index('Date_reported')
 # print(target_df)
 
-## 신규 확진자
-# new_case_df = target_df[['New_cases']]
-# print(new_case_df)
-# new_case_df.plot(title = target, figsize=(20,5))
-# plt.show()
-
-## 누적 확진자
-# new_case_df = target_df[['Cumulative_cases']]
-# print(new_case_df)
-# new_case_df.plot(title = target, figsize=(20,5))
-# plt.show()
-
-## 신규 사망자
-# new_case_df = target_df[['New_deaths']]
-# print(new_case_df)
-# new_case_df.plot(title = target, figsize=(20,5))
-# plt.show()
-
-## 누적 사망자
-# new_case_df = target_df[['Cumulative_deaths']]
-# print(new_case_df)
-# new_case_df.plot(title = target, figsize=(20,5))
-# plt.show()
+## 검토 대상 설정
+review_target = 'New_cases'
+# review_target = 'Cumulative_cases'
+# review_target = 'New_deaths'
+# review_target = 'Cumulative_deaths'
 
 
-## 타겟 지역 정보만 가져오기
-target_area = 'EURO'              ### EURO (유럽), WPRO(극동아시아)   AMRO (북남미), EMRO (중동) SEARO (중앙아시아) , WPRO(호주 등)
-columns1 = ['Date_reported', 'Country', 'New_cases', 'Cumulative_cases', 'New_deaths', 'Cumulative_deaths']
-target_df1 = df.loc[df["WHO_region"] == target_area, columns1]
-# print(target_df1)
-target_df1 = target_df1.set_index('Date_reported')
-# print(target_df1)
+## 검토
+case_df = target_df[review_target].sort_index()
+# print(case_df.mean())
 
-## 신규 확진자
-case_df1 = target_df1[['New_cases']].sort_index()
-# print(case_df1)
-case_df1.plot(title = target_area, figsize=(20,5))
+start_point = -100   ## 최종에서 역으로 00일치
+
+mean1= case_df[start_point:].mean()
+# print(mean1)   ## 0명 포함 평균
+for_mean_df = case_df[case_df > 0]
+# print(for_mean_df)
+mean2 = for_mean_df[start_point:].mean()
+print("국가별 평균값(0제외) : {} / {}".format(mean2, target))   ## 0명 제외 평균
+
+
+## 시각화 분석
+g = case_df[start_point:].plot(title = "{0}({1})".format(target,review_target), figsize=(20,5))
+g.text(x=2, y=3, s=3)   # 좌표 2, 3에 레이블 3을 표시 (for문으로 돌리면서 전부 표시 가능)
+
+if start_point == 0:
+    for i in range(len(case_df)):
+        case_count = case_df[start_point:].iloc[i]
+        if case_count > mean2:
+            g.text(x=i, y=case_count, s=case_count)
+else:
+    for i in range(start_point*-1):
+        case_count = case_df[start_point:].iloc[i]
+        if case_count > mean2:
+            g.text(x=i, y=case_count, s=case_count)
+
+plt.axhline(mean2, color="red", linestyle=":")
 plt.show()
 
-## 누적 확진자
-case_df1 = target_df1[['Cumulative_cases']].sort_index()
-# print(case_df1)
-case_df1.plot(title = target_area, figsize=(20,5))
-plt.show()

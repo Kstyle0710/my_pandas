@@ -23,6 +23,7 @@ df["주"] = df["확진일자"].dt.isocalendar().week
 df['월일'] = df["확진일자"].astype(str).map(lambda x : x[-5:])
 
 day_count = df['월일'].value_counts().sort_index()
+print(day_count)
 
 # 일일 발생자 일반 플롯 차트
 # g= day_count.plot(title="Daily Seoul Covid19", figsize=(16, 8))
@@ -66,14 +67,14 @@ day_count = df['월일'].value_counts().sort_index()
 # plt.show()
 
 # 주단위 확진자에 대한 빈도수 시각회
-weekly_case = df["주"].value_counts().sort_index() # sort_index가 없으면, 시간 순서가 아닌 확진자가 많은 순서대로 시각화를 하는 문제 발생
-print(weekly_case)
-# # print(weekly_case.iloc[0])    # 특정 인덱스 월별 확진자 인원수
-weekly_mean = weekly_case.mean()
-g = weekly_case.plot.bar(title = "Weekly Seoul Covid19", figsize=(12, 5), rot=0)
-for i in range(len(weekly_case)):
-     case_count = weekly_case.iloc[i]
-     if case_count > 20:
-         g.text(x=i-0.1, y=weekly_case.iloc[i]+50, s=weekly_case.iloc[i])
-plt.axhline(weekly_mean, color="red", linestyle=":")
-plt.show()
+# weekly_case = df["주"].value_counts().sort_index() # sort_index가 없으면, 시간 순서가 아닌 확진자가 많은 순서대로 시각화를 하는 문제 발생
+# print(weekly_case)
+# # # print(weekly_case.iloc[0])    # 특정 인덱스 월별 확진자 인원수
+# weekly_mean = weekly_case.mean()
+# g = weekly_case.plot.bar(title = "Weekly Seoul Covid19", figsize=(12, 5), rot=0)
+# for i in range(len(weekly_case)):
+#      case_count = weekly_case.iloc[i]
+#      if case_count > 20:
+#          g.text(x=i-0.1, y=weekly_case.iloc[i]+50, s=weekly_case.iloc[i])
+# plt.axhline(weekly_mean, color="red", linestyle=":")
+# plt.show()
