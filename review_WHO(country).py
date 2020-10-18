@@ -73,8 +73,8 @@ country = df["Country"].unique()
 
 '''
 
-################### 국가별 분석
-target = 'France'         ## 'Republic of Korea'
+## 검토 대상 설정
+target = 'Germany'         ## 'Republic of Korea'
 columns = ['Date_reported', 'Country', 'New_cases', 'Cumulative_cases', 'New_deaths', 'Cumulative_deaths']   ## 출력 대상 칼럼
 target_df = df.loc[df["Country"] == target, columns]
 # date_list = df.values.tolist()
@@ -83,18 +83,20 @@ target_df = df.loc[df["Country"] == target, columns]
 target_df = target_df.set_index('Date_reported')
 # print(target_df)
 
-## 검토 대상 설정
+
 review_target = 'New_cases'
 # review_target = 'Cumulative_cases'
 # review_target = 'New_deaths'
 # review_target = 'Cumulative_deaths'
+
+start_point = -100   ## 최종에서 역으로 00일치
 
 
 ## 검토
 case_df = target_df[review_target].sort_index()
 # print(case_df.mean())
 
-start_point = -100   ## 최종에서 역으로 00일치
+
 
 mean1= case_df[start_point:].mean()
 # print(mean1)   ## 0명 포함 평균
@@ -105,8 +107,7 @@ print("국가별 평균값(0제외) : {} / {}".format(mean2, target))   ## 0명 
 
 
 ## 시각화 분석
-g = case_df[start_point:].plot(title = "{0}({1})".format(target,review_target), figsize=(20,5))
-g.text(x=2, y=3, s=3)   # 좌표 2, 3에 레이블 3을 표시 (for문으로 돌리면서 전부 표시 가능)
+g = case_df[start_point:].plot(title = "{0} ({1}) - 평균값 : {2}".format(target,review_target, int(mean2)), figsize=(15,8))
 
 if start_point == 0:
     for i in range(len(case_df)):
