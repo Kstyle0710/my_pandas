@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-df = pd.read_csv('./data/seoul_covid19_10_16_.csv', encoding = 'utf-8')
+df = pd.read_csv('./data/seoul_covid19_10_29_.csv', encoding = 'utf-8')   # 최근 다운로드 파일명으로 교체
 
 ## 한글 폰트 설정
 import matplotlib.pyplot as plt
@@ -58,7 +58,7 @@ print(day_count)
 # # print(month_case)
 # # print(month_case.iloc[0])    # 특정 인덱스 월별 확진자 인원수
 # month_mean = month_case.mean()
-# g = month_case.plot.bar(title = "Monthly Seoul Covid19", figsize=(16, 8), rot=0)
+# g = month_case.plot.bar(title = "Monthly Seoul Covid19 - 평균값 {0}".format(int(month_mean)), figsize=(16, 8), rot=0)
 # for i in range(len(month_case)):
 #      case_count = month_case.iloc[i]
 #      if case_count > 20:
@@ -71,7 +71,7 @@ print(day_count)
 # print(weekly_case)
 # # # print(weekly_case.iloc[0])    # 특정 인덱스 월별 확진자 인원수
 # weekly_mean = weekly_case.mean()
-# g = weekly_case.plot.bar(title = "Weekly Seoul Covid19", figsize=(12, 5), rot=0)
+# g = weekly_case.plot.bar(title = "Weekly Seoul Covid19 - 평균값 {0}".format(int(weekly_mean)), figsize=(12, 5), rot=0)
 # for i in range(len(weekly_case)):
 #      case_count = weekly_case.iloc[i]
 #      if case_count > 20:

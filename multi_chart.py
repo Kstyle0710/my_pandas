@@ -74,7 +74,7 @@ country = df["Country"].unique()
 '''
 
 ## 검토 대상 설정
-target = 'Republic of Korea'         ## 'Republic of Korea'  Germany    Sweden   France   Saudi Arabia   Japan   China  Brazil   India   United States of America
+target = 'United States of America'         ## 'Republic of Korea'  Germany    Sweden   France   Saudi Arabia   Japan   China  Brazil   India   United States of America
 columns = ['Date_reported', 'Country', 'New_cases', 'Cumulative_cases', 'New_deaths', 'Cumulative_deaths']   ## 출력 대상 칼럼
 target_df = df.loc[df["Country"] == target, columns]
 print(target_df.tail())
@@ -121,6 +121,10 @@ else:
         if case_count > mean2:
             g.text(x=i, y=case_count, s=case_count)
 
+
+plt.subplot(2,2,1)
+plt.plot(case_count, target_df[review_target])
 plt.axhline(mean2, color="red", linestyle=":")
 plt.show()
+
 
