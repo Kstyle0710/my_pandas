@@ -97,20 +97,6 @@ for i, nation in enumerate(targets):
     mean3 = for_mean_df.mean()   # 전체구간 평균값 구하기 (0값 제외후)
     print("{}의 구간 평균값(0제외) : {}".format(nation, mean2))   ## 0명 제외 평균
 
-    ### 평균 이상 값 표시
-    # g = case_df[start_point:].plot(title = "{0} ({1}) - 평균값 : {2}".format(target,review_target, int(mean2)), figsize=(15,8))
-    # #
-    # if start_point == 0:
-    #     for i in range(len(case_df)):
-    #         case_count = case_df[start_point:].iloc[i]
-    #         if case_count > mean2:
-    #             g.text(x=i, y=case_count, s=case_count)
-    # else:
-    #     for i in range(start_point*-1):
-    #         case_count = case_df[start_point:].iloc[i]
-    #         if case_count > mean2:
-    #             g.text(x=i, y=case_count, s=case_count)
-
     ## 시각화
     g= plt.subplot(2,2,i+1, title = "{0} ({1}) - 구간평균 : {2}, 총평균 : {3}".format(nation,review_target, int(mean2), int(mean3)))
     plt.plot(case_df[start_point:])
