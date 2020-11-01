@@ -2,11 +2,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-plt.rc("font", family="Malgun Gothic")
-## 숫자 마이너스 값 깨짐 현장 해결
-plt.rc("axes", unicode_minus=False)
+plt.rc("font", family="Malgun Gothic")  ## 한글 폰트 적용
+plt.rc("axes", unicode_minus=False)  ## 숫자 마이너스 값 깨짐 현장 해결
 plt.style.use("fivethirtyeight")
-
 
 ## 파일 읽어오기
 df = pd.read_csv('./data/WHO-COVID-19-global-data.csv')
@@ -19,7 +17,6 @@ df.columns = df.columns.str.replace(' ', '')
 
 ## 국가 종류 식별하기
 country = df["Country"].unique()
-# print(country)
 
 '''
 ['Afghanistan' 'Albania' 'Algeria' 'American Samoa' 'Andorra' 'Angola'
@@ -77,45 +74,30 @@ country = df["Country"].unique()
 targets = ['Republic of Korea', 'United States of America', 'France', 'The United Kingdom']
 columns = ['Date_reported', 'Country', 'New_cases', 'Cumulative_cases', 'New_deaths', 'Cumulative_deaths']   ## 출력 대상 칼럼
 
-start_point = -100   ## 최종에서 역으로 00일치
-fig, axs = plt.subplots(2, 2, figsize=(15, 9))
+start_point = -100   ## 최종에서 역으로 00일치 구간값 설정
+fig, axs = plt.subplots(2, 2, figsize=(20, 9))    ## 차트의 구조와 크기 설정
 
 for i, nation in enumerate(targets):
     target_df = df.loc[df["Country"] == nation, columns]
-    # print(target_df.tail())
-    # date_list = df.values.tolist()
-    # print(date_list)
-    # print(target_df)
     target_df = target_df.set_index('Date_reported')
-    # print(target_df)
 
-
+    ## 검토 대상 선택
     review_target = 'New_cases'
     # review_target = 'Cumulative_cases'
     # review_target = 'New_deaths'
     # review_target = 'Cumulative_deaths'
 
-
-
-
-    ## 검토
+    ## 검토 대상 정렬
     case_df = target_df[review_target].sort_index()    # 날짜순 정렬
-    # print(case_df)
-    # print(case_df.mean())
 
-
-
+    ## 평균값 구하기
     mean1= case_df[start_point:].mean()
-    # print(mean1)   ## 0명 포함 평균
     for_mean_df = case_df[case_df > 0]
-    # print(for_mean_df)
-    mean2 = for_mean_df[start_point:].mean()     # 지정구간 평균값 구하기
-    print("{}의 평균값(0제외) : {}".format(nation, mean2))   ## 0명 제외 평균
-    # print(case_df.head())
+    mean2 = for_mean_df[start_point:].mean()     # 지정구간 평균값 구하기 (0값 제외후)
+    mean3 = for_mean_df.mean()   # 전체구간 평균값 구하기 (0값 제외후)
+    print("{}의 구간 평균값(0제외) : {}".format(nation, mean2))   ## 0명 제외 평균
 
-
-
-    # ## 평균 이상 값 표시
+    ### 평균 이상 값 표시
     # g = case_df[start_point:].plot(title = "{0} ({1}) - 평균값 : {2}".format(target,review_target, int(mean2)), figsize=(15,8))
     # #
     # if start_point == 0:
@@ -129,12 +111,21 @@ for i, nation in enumerate(targets):
     #         if case_count > mean2:
     #             g.text(x=i, y=case_count, s=case_count)
 
-
-
-
-    plt.subplot(2,2,i+1, title = "{0} ({1}) - 평균값 : {2}".format(nation,review_target, int(mean2)))
+    ## 시각화
+    g= plt.subplot(2,2,i+1, title = "{0} ({1}) - 구간평균 : {2}, 총평균 : {3}".format(nation,review_target, int(mean2), int(mean3)))
     plt.plot(case_df[start_point:])
+    if start_point == 0:
+        for i in range(len(case_df)):
+            case_count = case_df[start_point:].iloc[i]
+            if case_count > mean2:
+                g.text(x=i, y=case_count, s=case_count)
+    else:
+        for i in range(start_point*-1):
+            case_count = case_df[start_point:].iloc[i]
+            if case_count > mean2:
+                g.text(x=i, y=case_count, s=case_count)
+
     plt.axhline(mean2, color="red", linestyle=":")
+    plt.axhline(mean3, color="blue", linestyle=":")
+
 plt.show()
-
-

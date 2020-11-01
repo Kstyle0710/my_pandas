@@ -103,12 +103,13 @@ mean1= case_df[start_point:].mean()
 # print(mean1)   ## 0명 포함 평균
 for_mean_df = case_df[case_df > 0]
 # print(for_mean_df)
-mean2 = for_mean_df[start_point:].mean()
+mean2 = for_mean_df[start_point:].mean()  # 지정구간 평균값 구하기 (0값 제외후)
+mean3 = for_mean_df.mean()  # 전체구간 평균값 구하기 (0값 제외후)
 print("국가별 평균값(0제외) : {} / {}".format(mean2, target))   ## 0명 제외 평균
 
 
 ## 시각화 분석
-g = case_df[start_point:].plot(title = "{0} ({1}) - 평균값 : {2}".format(target,review_target, int(mean2)), figsize=(15,8))
+g = case_df[start_point:].plot(title = "{0} ({1}) - 구간평균 : {2}, 총평균 : {3}".format(target,review_target, int(mean2), int(mean3)), figsize=(15,8))
 
 if start_point == 0:
     for i in range(len(case_df)):
@@ -122,5 +123,6 @@ else:
             g.text(x=i, y=case_count, s=case_count)
 
 plt.axhline(mean2, color="red", linestyle=":")
+plt.axhline(mean3, color="blue", linestyle=":")
 plt.show()
 
