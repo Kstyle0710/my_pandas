@@ -74,57 +74,67 @@ country = df["Country"].unique()
 '''
 
 ## 검토 대상 설정
-target = 'United States of America'         ## 'Republic of Korea'  Germany    Sweden   France   Saudi Arabia   Japan   China  Brazil   India   United States of America
+targets = ['Republic of Korea', 'United States of America', 'France', 'The United Kingdom']
 columns = ['Date_reported', 'Country', 'New_cases', 'Cumulative_cases', 'New_deaths', 'Cumulative_deaths']   ## 출력 대상 칼럼
-target_df = df.loc[df["Country"] == target, columns]
-print(target_df.tail())
-# date_list = df.values.tolist()
-# print(date_list)
-# print(target_df)
-target_df = target_df.set_index('Date_reported')
-# print(target_df)
-
-
-review_target = 'New_cases'
-# review_target = 'Cumulative_cases'
-# review_target = 'New_deaths'
-# review_target = 'Cumulative_deaths'
 
 start_point = -100   ## 최종에서 역으로 00일치
+fig, axs = plt.subplots(2, 2, figsize=(15, 9))
+
+for i, nation in enumerate(targets):
+    target_df = df.loc[df["Country"] == nation, columns]
+    # print(target_df.tail())
+    # date_list = df.values.tolist()
+    # print(date_list)
+    # print(target_df)
+    target_df = target_df.set_index('Date_reported')
+    # print(target_df)
 
 
-## 검토
-case_df = target_df[review_target].sort_index()
-# print(case_df.mean())
+    review_target = 'New_cases'
+    # review_target = 'Cumulative_cases'
+    # review_target = 'New_deaths'
+    # review_target = 'Cumulative_deaths'
 
 
 
-mean1= case_df[start_point:].mean()
-# print(mean1)   ## 0명 포함 평균
-for_mean_df = case_df[case_df > 0]
-# print(for_mean_df)
-mean2 = for_mean_df[start_point:].mean()
-print("국가별 평균값(0제외) : {} / {}".format(mean2, target))   ## 0명 제외 평균
+
+    ## 검토
+    case_df = target_df[review_target].sort_index()    # 날짜순 정렬
+    # print(case_df)
+    # print(case_df.mean())
 
 
-## 시각화 분석
-g = case_df[start_point:].plot(title = "{0} ({1}) - 평균값 : {2}".format(target,review_target, int(mean2)), figsize=(15,8))
 
-if start_point == 0:
-    for i in range(len(case_df)):
-        case_count = case_df[start_point:].iloc[i]
-        if case_count > mean2:
-            g.text(x=i, y=case_count, s=case_count)
-else:
-    for i in range(start_point*-1):
-        case_count = case_df[start_point:].iloc[i]
-        if case_count > mean2:
-            g.text(x=i, y=case_count, s=case_count)
+    mean1= case_df[start_point:].mean()
+    # print(mean1)   ## 0명 포함 평균
+    for_mean_df = case_df[case_df > 0]
+    # print(for_mean_df)
+    mean2 = for_mean_df[start_point:].mean()     # 지정구간 평균값 구하기
+    print("{}의 평균값(0제외) : {}".format(nation, mean2))   ## 0명 제외 평균
+    # print(case_df.head())
 
 
-plt.subplot(2,2,1)
-plt.plot(case_count, target_df[review_target])
-plt.axhline(mean2, color="red", linestyle=":")
+
+    # ## 평균 이상 값 표시
+    # g = case_df[start_point:].plot(title = "{0} ({1}) - 평균값 : {2}".format(target,review_target, int(mean2)), figsize=(15,8))
+    # #
+    # if start_point == 0:
+    #     for i in range(len(case_df)):
+    #         case_count = case_df[start_point:].iloc[i]
+    #         if case_count > mean2:
+    #             g.text(x=i, y=case_count, s=case_count)
+    # else:
+    #     for i in range(start_point*-1):
+    #         case_count = case_df[start_point:].iloc[i]
+    #         if case_count > mean2:
+    #             g.text(x=i, y=case_count, s=case_count)
+
+
+
+
+    plt.subplot(2,2,i+1, title = "{0} ({1}) - 평균값 : {2}".format(nation,review_target, int(mean2)))
+    plt.plot(case_df[start_point:])
+    plt.axhline(mean2, color="red", linestyle=":")
 plt.show()
 
 
