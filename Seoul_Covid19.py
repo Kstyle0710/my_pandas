@@ -26,7 +26,7 @@ day_count = df['월일'].value_counts().sort_index()
 print(day_count)
 
 # 일일 발생자 일반 플롯 차트
-# g= day_count.plot(title="Daily Seoul Covid19", figsize=(16, 8))
+# g= day_count.plot(title="Daily Seoulovid19", figsize=(16, 8))
 # g.text(x=2, y=3, s=3)   # 좌표 2, 3에 레이블 3을 표시 (for문으로 돌리면서 전부 표시 가능)
 # for i in range(len(day_count)):
 #     case_count = day_count.iloc[i]

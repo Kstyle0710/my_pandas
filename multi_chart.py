@@ -71,7 +71,7 @@ country = df["Country"].unique()
 '''
 
 ## 검토 대상 설정
-targets = ['Republic of Korea', 'United States of America', 'France', 'The United Kingdom']
+targets = ['United States of America', 'France', 'Republic of Korea', 'Sweden']
 columns = ['Date_reported', 'Country', 'New_cases', 'Cumulative_cases', 'New_deaths', 'Cumulative_deaths']   ## 출력 대상 칼럼
 
 start_point = -100   ## 최종에서 역으로 00일치 구간값 설정
