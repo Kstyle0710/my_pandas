@@ -1,6 +1,10 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+
 
 plt.rc("font", family="Malgun Gothic")
 ## 숫자 마이너스 값 깨짐 현장 해결
@@ -10,10 +14,6 @@ plt.style.use("fivethirtyeight")
 
 ## 파일 읽어오기
 df = pd.read_csv('./data/WHO-COVID-19-global-data.csv')
-# print(df.shape)
-# print(df.info())
-# print(df.head())
-
 ## 칼럼명의 공란 지우기
 df.columns = df.columns.str.replace(' ', '')
 
@@ -77,52 +77,40 @@ country = df["Country"].unique()
 target = "Republic of Korea"         ## 'Republic of Korea'  Germany    Sweden   France   Saudi Arabia   Japan   China  Brazil   India   United States of America
 columns = ['Date_reported', 'Country', 'New_cases', 'Cumulative_cases', 'New_deaths', 'Cumulative_deaths']   ## 출력 대상 칼럼
 target_df = df.loc[df["Country"] == target, columns]
-print(target_df.tail())
-# date_list = df.values.tolist()
-# print(date_list)
-# print(target_df)
-target_df = target_df.set_index('Date_reported')
-# print(target_df)
+# print(target_df.head(10))
+
+x = target_df["Date_reported"]
+y = target_df["New_cases"]
+l = plt.plot(x,y)
+
+print(type(x))
+# for i in x:
+#     print(i)
+#     y = target_df.loc[target_df["Date_reported"] == i, "New_cases"]
+#     print(y)
 
 
-review_target = 'New_cases'
-# review_target = 'Cumulative_cases'
-# review_target = 'New_deaths'
-# review_target = 'Cumulative_deaths'
+fig, ax = plt.subplots()
 
-start_point = -100   ## 최종에서 역으로 00일치
-
-
-## 검토
-case_df = target_df[review_target].sort_index()
-# print(case_df.mean())
+def calcul(date):
+    target = "Republic of Korea"  ## 'Republic of Korea'  Germany    Sweden   France   Saudi Arabia   Japan   China  Brazil   India   United States of America
+    columns = ['Date_reported', 'Country', 'New_cases', 'Cumulative_cases', 'New_deaths',
+               'Cumulative_deaths']  ## 출력 대상 칼럼
+    target_df = df.loc[df["Country"] == target, columns]
 
 
+    y = target_df.loc[target_df["Date_reported"] == date, "New_cases"]
+    return y
 
-mean1= case_df[start_point:].mean()
-# print(mean1)   ## 0명 포함 평균
-for_mean_df = case_df[case_df > 0]
-# print(for_mean_df)
-mean2 = for_mean_df[start_point:].mean()  # 지정구간 평균값 구하기 (0값 제외후)
-mean3 = for_mean_df.mean()  # 전체구간 평균값 구하기 (0값 제외후)
-print("국가별 평균값(0제외) : {} / {}".format(mean2, target))   ## 0명 제외 평균
+print(calcul("2020-11-08"))
+
+redDot, = plt.plot([0], [calcul(0)], 'ro')
+def animate(i):
+    redDot.set_data(i, calcul(i))
+    return redDot,
+
+# create animation using the animate() function
+myAnimation = animation.FuncAnimation(fig, animate,interval=0.1, blit=True, repeat=True)
 
 
-## 시각화 분석
-g = case_df[start_point:].plot(title = "{0} ({1}) - 구간평균 : {2}, 총평균 : {3}".format(target,review_target, int(mean2), int(mean3)), figsize=(15,8))
-
-if start_point == 0:
-    for i in range(len(case_df)):
-        case_count = case_df[start_point:].iloc[i]
-        if case_count > mean2:
-            g.text(x=i, y=case_count, s=case_count)
-else:
-    for i in range(start_point*-1):
-        case_count = case_df[start_point:].iloc[i]
-        if case_count > mean2:
-            g.text(x=i, y=case_count, s=case_count)
-
-plt.axhline(mean2, color="red", linestyle=":")
-plt.axhline(mean3, color="blue", linestyle=":")
 plt.show()
-
